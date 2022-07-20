@@ -22,9 +22,17 @@ namespace MembersAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> RegisterAsync(Register register)
         {
-            _context.registers.Add(register);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.registers.ToListAsync());
+            try
+            {
+                _context.registers2.Add(register);
+                await _context.SaveChangesAsync();
+                return Ok(await _context.registers2.ToListAsync());
+            }
+            catch (Exception e)
+            {
+                return Ok(e);
+            }
+           
         }
 
         [HttpPost("Login")]
@@ -36,6 +44,42 @@ namespace MembersAPI.Controllers
 
             return null;
         }
+
+        //Get all users [elif]
+        [HttpGet]
+
+        public async Task<ActionResult<List<Register>>> GetUsers()
+        {
+            try
+            {
+                return Ok(await _context.registers2.ToListAsync());
+
+            }
+            catch (Exception e)
+            {
+                return Ok(e);
+            }
+        }
+
+        // User search by Email [elif]
+        [HttpGet("Email")]
+        
+        public async Task<ActionResult<Register>> GetUser(string Email)
+        {
+            asdas();
+            var user = await _context.registers2.FirstOrDefaultAsync(h => h.Email == Email);
+            //if user exist
+            if (user == null)
+                return StatusCode(409, "User not found.");// NotFound();
+
+            return Ok(user);
+        }
+
+
+
+
+
+
 
 
     }
