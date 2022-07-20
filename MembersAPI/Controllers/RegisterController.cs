@@ -33,8 +33,8 @@ namespace MembersAPI.Controllers
         public async Task<ActionResult> LoginAsync(Register register)
         {
             var checkUser = await _context.Set<Register>().FirstOrDefaultAsync(x => x.Password == register.Password);
-            
 
+            return null;
         }
 
 
