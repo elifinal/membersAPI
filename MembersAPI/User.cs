@@ -2,7 +2,7 @@
 
 namespace MembersAPI
 {
-    public class User : IValidatableObject
+    public class User
     {
         [Required]
         public string Email { get; set; }

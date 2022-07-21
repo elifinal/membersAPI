@@ -8,7 +8,7 @@ namespace MembersAPI.Data
         {
 
         }
-        public DbSet<Register> Registers { get; set; }
+        public DbSet<Member> Member { get; set; }
 
 
     }
