@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+
+
 
 namespace MembersAPI.Controllers
 {
@@ -24,9 +29,9 @@ namespace MembersAPI.Controllers
         {
             try
             {
-                _context.registers2.Add(register);
+                _context.Registers.Add(register);
                 await _context.SaveChangesAsync();
-                return Ok(await _context.registers2.ToListAsync());
+                return Ok(await _context.Registers.ToListAsync());
             }
             catch (Exception e)
             {
@@ -52,7 +57,7 @@ namespace MembersAPI.Controllers
         {
             try
             {
-                return Ok(await _context.registers2.ToListAsync());
+                return Ok(await _context.Registers.ToListAsync());
 
             }
             catch (Exception e)
@@ -66,14 +71,30 @@ namespace MembersAPI.Controllers
         
         public async Task<ActionResult<Register>> GetUser(string Email)
         {
-            asdas();
-            var user = await _context.registers2.FirstOrDefaultAsync(h => h.Email == Email);
+            var user = await _context.Registers.FirstOrDefaultAsync(h => h.Email == Email);
             //if user exist
             if (user == null)
-                return StatusCode(409, "User not found.");// NotFound();
+                return StatusCode(404, "User not found.");// NotFound();
 
-            return Ok(user);
+            //try
+            //{
+            //    var email = new MimeKit.MimeMessage();
+            //    email.From.Add(MailboxAddress.Parse("jacques98@ethereal.email"));
+            //    email.To.Add(MailboxAddress.Parse("jacques98@ethereal.email"));
+            //    email.Subject = "Test deneme birki";
+            //    email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "asffsd" };
+
+            //    using var smtp = new SmtpClient();
+            //    smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+            //    smtp.Authenticate("jacques98@ethereal.email", "M2ggAjXZDP1pbzme1z");
+            //    smtp.Send(email);
+            //    smtp.Disconnect(true);
+            //}
+
+            return Ok();
         }
+
+
 
 
 
