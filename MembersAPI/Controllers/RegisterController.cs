@@ -10,14 +10,13 @@ namespace MembersAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegisterController : ControllerBase
+    public class MemberController : ControllerBase
     {
-        private static Register rg = new Register();
 
 
         private readonly DataContext _context;
 
-        public RegisterController(DataContext context)
+        public MemberController(DataContext context)
         {
             _context = context;
         }
@@ -25,13 +24,13 @@ namespace MembersAPI.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> RegisterAsync(Register register)
+        public async Task<ActionResult> MemberAsync(Member Member)
         {
             try
             {
-                _context.Registers.Add(register);
+                _context.Member.Add(Member);
                 await _context.SaveChangesAsync();
-                return Ok(await _context.Registers.ToListAsync());
+                return Ok(await _context.Member.ToListAsync());
             }
             catch (Exception e)
             {
@@ -43,9 +42,9 @@ namespace MembersAPI.Controllers
         [HttpPost("Login")]
         // login model
        // 
-        public async Task<ActionResult> LoginAsync(Register register)
+        public async Task<ActionResult> LoginAsync(Member Member)
         {
-            var checkUser = await _context.Set<Register>().FirstOrDefaultAsync(x => x.Password == register.Password);
+            var checkUser = await _context.Set<Member>().FirstOrDefaultAsync(x => x.Password == Member.Password);
 
             return null;
         }
@@ -53,11 +52,11 @@ namespace MembersAPI.Controllers
         //Get all users [elif]
         [HttpGet]
 
-        public async Task<ActionResult<List<Register>>> GetUsers()
+        public async Task<ActionResult<List<Member>>> GetUsers()
         {
             try
             {
-                return Ok(await _context.Registers.ToListAsync());
+                return Ok(await _context.Member.ToListAsync());
 
             }
             catch (Exception e)
@@ -69,9 +68,9 @@ namespace MembersAPI.Controllers
         // User search by Email [elif]
         [HttpGet("Email")]
         
-        public async Task<ActionResult<Register>> GetUser(string Email)
+        public async Task<ActionResult<Member>> GetUser(string Email)
         {
-            var user = await _context.Registers.FirstOrDefaultAsync(h => h.Email == Email);
+            var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == Email);
             //if user exist
             if (user == null)
                 return StatusCode(404, "User not found.");// NotFound();
