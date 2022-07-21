@@ -13,7 +13,7 @@ namespace MembersAPI.Controllers
     public class MemberController : ControllerBase
     {
 
-
+ 
         private readonly DataContext _context;
 
         public MemberController(DataContext context)
@@ -46,7 +46,6 @@ namespace MembersAPI.Controllers
         {
             var checkUser = await _context.Set<Member>().FirstOrDefaultAsync(x => x.Password == Member.Password);
 
-            return null;
         }
 
         //Get all users [elif]
