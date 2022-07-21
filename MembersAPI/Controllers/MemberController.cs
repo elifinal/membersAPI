@@ -45,7 +45,7 @@ namespace MembersAPI.Controllers
         public async Task<ActionResult> LoginAsync(Member Member)
         {
             var checkUser = await _context.Set<Member>().FirstOrDefaultAsync(x => x.Password == Member.Password);
-
+            return null;
         }
 
         //Get all users [elif]
