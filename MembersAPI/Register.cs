@@ -3,7 +3,6 @@
 namespace MembersAPI
 {
     public class Register : IValidatableObject
-
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -21,6 +20,7 @@ namespace MembersAPI
             {
                 yield return new ValidationResult("Parola minimum 3 karakterden oluşmalı");
             }
+
         }
     }
 }

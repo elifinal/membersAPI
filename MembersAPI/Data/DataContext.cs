@@ -6,12 +6,9 @@ namespace MembersAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
+
         }
-
-
-
-        public DbSet<SuperHero> superHeroes { get; set; }
-        public DbSet<Register> registers { get; set; }
+        public DbSet<Register> Registers { get; set; }
 
 
     }
