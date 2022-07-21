@@ -45,41 +45,13 @@ namespace MembersAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Password")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("registers");
-                });
-
-            modelBuilder.Entity("MembersAPI.SuperHero", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("FirsName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Place")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("superHeroes");
+                    b.ToTable("registers2");
                 });
 #pragma warning restore 612, 618
         }
