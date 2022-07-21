@@ -7,9 +7,8 @@ namespace MembersAPI.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
-        private static Register rg = new Register();
 
-
+ 
         private readonly DataContext _context;
 
         public RegisterController(DataContext context)
@@ -30,11 +29,19 @@ namespace MembersAPI.Controllers
         [HttpPost("Login")]
         // login model
        // 
-        public async Task<ActionResult> LoginAsync(Register register)
+        public async Task<ActionResult> LoginAsync(User user)
         {
-            var checkUser = await _context.Set<Register>().FirstOrDefaultAsync(x => x.Password == register.Password);
+            var checkUser = await _context.Set<Register>().FirstOrDefaultAsync(x => x.Password == user.Password && x.Email == user.Email);
 
-            return null;
+            if (checkUser != null)
+            {
+                return Ok(200);
+            }
+            else 
+            {
+                return BadRequest("Kişi yok");
+            }
+
         }
 
 
