@@ -13,14 +13,13 @@ namespace MembersAPI.Controllers
     public class MemberController : ControllerBase
     {
 
- 
+
         private readonly DataContext _context;
 
         public MemberController(DataContext context)
         {
             _context = context;
         }
-
 
 
         [HttpPost]
@@ -36,12 +35,12 @@ namespace MembersAPI.Controllers
             {
                 return Ok(e);
             }
-           
+
         }
 
         [HttpPost("Login")]
         // login model
-       // 
+        // 
         public async Task<ActionResult> LoginAsync(Member Member)
         {
             var checkUser = await _context.Set<Member>().FirstOrDefaultAsync(x => x.Password == Member.Password);
@@ -65,14 +64,25 @@ namespace MembersAPI.Controllers
         }
 
         // User search by Email [elif]
-        [HttpGet("Email")]
+        [HttpPost("Email")]
         
-        public async Task<ActionResult<Member>> GetUser(string Email)
+        public async Task<ActionResult> SendMail(EmailContent emailContent)
         {
+            var Email = emailContent.UserEmail ;
+
             var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == Email);
             //if user exist
             if (user == null)
                 return StatusCode(404, "User not found.");// NotFound();
+
+
+            return Ok("Email Sent");
+            //var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == Email);
+            ////if user exist
+            //if (user == null)
+            //    return StatusCode(404, "User not found.");// NotFound();
+
+            
 
             //try
             //{
@@ -89,7 +99,6 @@ namespace MembersAPI.Controllers
             //    smtp.Disconnect(true);
             //}
 
-            return Ok();
         }
 
 
