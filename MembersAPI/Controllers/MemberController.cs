@@ -42,10 +42,10 @@ namespace MembersAPI.Controllers
         [HttpPost("Login")]
         // login model
        // 
-        public async Task<ActionResult> LoginAsync(Member Member)
+        public async Task<ActionResult> LoginAsync(Member member)
         {
-            var checkUser = await _context.Set<Member>().FirstOrDefaultAsync(x => x.Password == Member.Password);
-            return null;
+            var checkUser = await _context.Member.FirstOrDefaultAsync(x => x.Password == member.Password && x.Email== member.Email);
+            return checkUser != null ? Ok("Giriş başarılı") : BadRequest("Hatalı giriş denemesi");
         }
 
         //Get all users [elif]
