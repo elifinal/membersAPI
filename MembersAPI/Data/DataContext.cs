@@ -9,6 +9,7 @@ namespace MembersAPI.Data
 
         }
         public DbSet<Member> Member { get; set; }
+        public DbSet<EmailRequestHist> EmailRequestHist { get; set; }
 
 
     }
