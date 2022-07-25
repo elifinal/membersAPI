@@ -1,4 +1,6 @@
-﻿namespace MembersAPI
+﻿
+
+namespace MembersAPI
 {
     public class Member
     {
