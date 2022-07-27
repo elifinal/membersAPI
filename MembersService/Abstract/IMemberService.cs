@@ -4,6 +4,6 @@ namespace MembersService.Abstract
 {
     public interface IMemberService
     {
-        AddMemberContract AddMember(AddMemberContract addMemberContract);
+        Task<AddMemberContract> AddMember(AddMemberContract addMemberContract);
     }
 }

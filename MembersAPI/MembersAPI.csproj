@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MembersDataAccess\MembersDataAccess.csproj" />
     <ProjectReference Include="..\MembersService\MembersService.csproj" />
   </ItemGroup>
 

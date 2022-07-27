@@ -1,5 +1,7 @@
-global using MembersAPI.Data;
 global using Microsoft.EntityFrameworkCore;
+using MembersDataAccess.Abstract;
+using MembersDataAccess.Concrete;
+using MembersDataAccess.Data;
 using MembersService.Abstract;
 using MembersService.Concrete;
 
@@ -16,7 +18,16 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+#region repositories
+builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddTransient<IMemberRepository, MemberRepository>();
+
+#endregion
+
+#region services
 builder.Services.AddScoped<IMemberService, MemberService>();
+
+#endregion
 
 var app = builder.Build();
 

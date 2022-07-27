@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MembersAPI
+namespace Members.Contract.Data
 {
     public class EmailRequestHist
     {

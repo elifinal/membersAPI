@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Members.Contract.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MembersDataAccess.Data
 {

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MembersApi.Contract\Members.Contract.csproj" />
+    <ProjectReference Include="..\MembersDataAccess\MembersDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

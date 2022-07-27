@@ -1,17 +1,27 @@
 ﻿using Members.Contract.Contracts;
+using MembersDataAccess.Abstract;
+using MembersDataAccess.Data;
 using MembersService.Abstract;
 
 namespace MembersService.Concrete
 {
     public class MemberService : IMemberService
     {
-        public AddMemberContract AddMember(AddMemberContract addMemberContract)
+        private readonly IMemberRepository _memberRepository;
+
+        public MemberService(IMemberRepository memberRepository)
+        {
+            _memberRepository=memberRepository;
+        }
+
+
+        public async Task<AddMemberContract> AddMember(AddMemberContract addMemberContract)
         {
             try
             {
                 // Email kontrolü
                 var email = addMemberContract.Email;
-                var emailValidation = string.Empty;// await _context.Member.FirstOrDefaultAsync(x => x.Email == email);
+                var emailValidation = await _memberRepository.FindByAsync(m => m.Email== addMemberContract.Email);
 
                 if (emailValidation != null)
                 {
