@@ -1,4 +1,5 @@
 ﻿using Members.Contract.Contracts;
+using Members.Contract.Data;
 using MembersDataAccess.Abstract;
 using MembersDataAccess.Data;
 using MembersService.Abstract;
@@ -11,11 +12,11 @@ namespace MembersService.Concrete
 
         public MemberService(IMemberRepository memberRepository)
         {
-            _memberRepository=memberRepository;
+            _memberRepository = memberRepository;
         }
 
 
-        public async Task<AddMemberContract> AddMember(AddMemberContract addMemberContract)
+        public async Task<AddMemberContract> AddMember(AddMemberContract addMemberContract) // task içerisinde ne yazıyorsa o döner (response olarak)
         {
             try
             {
@@ -25,14 +26,26 @@ namespace MembersService.Concrete
 
                 if (emailValidation != null)
                 {
-                    // return Ok("Bu Email kullanılmakta");
+                    throw new Exception();
                 }
 
+                var mapMember = new Member
+                {
+                    FirsName = addMemberContract.FirsName, // sol taraf db (new member dediğimiz için add için geçerli) ---- sağ client 
+                    LastName = addMemberContract.LastName,
+                    Email = addMemberContract.Email,
+                    Password = addMemberContract.Password,
+                    PhoneNumber = addMemberContract.PhoneNumber
+                };
 
-                //_context.Member.Add(member);
+                await _memberRepository.AddAsync(mapMember);
+
+
+                //_context.Member.Add(member);                          //// burada kullanılacak şeyleri 32 den başladık kullandık
                 //await _context.SaveChangesAsync();
 
-                //emailService.SendEmail(new EmailContent
+                //emailService.SendEmail(new EmailContent      // email service , dbde olan tablo kadar repo olur
+                //                                                      concrete emailservice  abstract Iemailseervice -- controller de emailservice de yapılacak
                 //{
                 //    UserEmail=email,
                 //    Title="Test Title",

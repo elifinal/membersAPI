@@ -21,11 +21,13 @@ builder.Services.AddDbContext<DataContext>(options =>
 #region repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IMemberRepository, MemberRepository>();
+// builder.Services.AddTransient<IEmailRepository, EmailRepository>();
 
 #endregion
 
 #region services
 builder.Services.AddScoped<IMemberService, MemberService>();
+//builder.Services.AddScoped<IEmailService, EmailService>();
 
 #endregion
 
