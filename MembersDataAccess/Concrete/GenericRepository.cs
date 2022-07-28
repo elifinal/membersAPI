@@ -25,11 +25,7 @@ namespace MembersDataAccess.Concrete
             return await Task.FromResult(_context.Set<T>().Where(expression));
 
         }
-        public async Task<T> FindByAsync(Expression<Func<T, bool>> expression)
-        {
-            return await Task.FromResult(_context.Set<T>().FirstOrDefault(expression));
-
-        }
+    
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {

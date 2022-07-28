@@ -21,7 +21,7 @@ namespace MembersService.Concrete
             {
                 // Email kontrolü
                 var email = addMemberContract.Email;
-                var emailValidation = await _memberRepository.FindByAsync(m => m.Email== addMemberContract.Email);
+                var emailValidation = await _memberRepository.GetMemberByEmail(addMemberContract.Email);
 
                 if (emailValidation != null)
                 {

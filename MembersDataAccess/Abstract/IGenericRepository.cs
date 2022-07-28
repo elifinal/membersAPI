@@ -12,7 +12,6 @@ namespace MembersDataAccess.Abstract
         /// <param name="expression"></param>
         /// <returns></returns>
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
-        Task<T> FindByAsync(Expression<Func<T, bool>> expression);
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task RemoveAsync(T entity);
