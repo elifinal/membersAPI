@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Members.Contract.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace MembersAPI.Data
+namespace MembersDataAccess.Data
 {
     public class DataContext : DbContext
     {

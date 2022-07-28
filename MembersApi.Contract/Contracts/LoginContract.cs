@@ -1,8 +1,6 @@
-﻿
-
-namespace MembersAPI
+﻿namespace Members.Contract.Contracts
 {
-    public class Member
+    public class AddMemberContract
     {
         public int Id { get; set; }
         public string FirsName { get; set; }
@@ -10,6 +8,5 @@ namespace MembersAPI
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
-
     }
 }

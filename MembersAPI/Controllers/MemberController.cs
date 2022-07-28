@@ -1,8 +1,6 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Http;
+﻿using Members.Contract.Contracts;
+using MembersService.Abstract;
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
 
 
 
@@ -14,120 +12,94 @@ namespace MembersAPI.Controllers
     {
 
 
-        private readonly DataContext _context;
+        private readonly IMemberService _memberService;
 
-        public MemberController(DataContext context)
+        public MemberController(IMemberService memberService)
         {
-            _context = context;
+            _memberService=memberService;
         }
+        EmailService emailService = new EmailService();
 
 
         [HttpPost]
-        public async Task<ActionResult> MemberAsync(Member Member)
+        public async Task<ActionResult> MemberAsync(AddMemberContract addMemberContract)
         {
-            try
-            {
-                _context.Member.Add(Member);
-                await _context.SaveChangesAsync();
-                return Ok(await _context.Member.ToListAsync());
-            }
-            catch (Exception e)
-            {
-                return Ok(e);
-            }
-
+            var result = await _memberService.AddMember(addMemberContract);
+            return Ok(result);
         }
 
         [HttpPost("Login")]
         // login model
-       // 
-        public async Task<ActionResult> LoginAsync(Member member)
+        // 
+        public async Task<ActionResult> LoginAsync(LoginContract loginContract)
         {
-            var checkUser = await _context.Member.FirstOrDefaultAsync(x => x.Password == member.Password && x.Email== member.Email);
-            return checkUser != null ? Ok("Giriş başarılı") : BadRequest("Hatalı giriş denemesi");
+            //var checkUser = await _context.Member.FirstOrDefaultAsync(x => x.Password == member.Password && x.Email== member.Email);
+            //return checkUser != null ? Ok("Giriş başarılı") : BadRequest("Hatalı giriş denemesi");
+            return Ok(loginContract);
         }
 
         //Get all users [elif]
-        [HttpGet]
+        //[HttpGet]
 
-        public async Task<ActionResult<List<Member>>> GetUsers()
-        {
-            try
-            {
-                return Ok(await _context.Member.ToListAsync());
+        //public async Task<ActionResult<List<Member>>> GetUsers()
+        //{
+        //    try
+        //    {
+        //        return Ok(await _context.Member.ToListAsync());
 
-            }
-            catch (Exception e)
-            {
-                return Ok(e);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Ok(e);
+        //    }
+        //}
 
         // User search by Email [elif]
-        [HttpPost("Email")]
-        
-        public async Task<ActionResult> SendMail(EmailContent emailContent)
-        {
-            var userEmail = emailContent.UserEmail ;
+        //[HttpPost("Email")]
 
-            var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == userEmail);
-            //if user exist
-            if (user == null)
-            {
-                return StatusCode(404, "User not found.");// NotFound();
-            }
+        //public async Task<ActionResult> SendMail(EmailContent emailContent)
+        //{
+        //    var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == emailContent.UserEmail);
+        //    //if user exist
+        //    if (user == null)
+        //    {
+        //        return StatusCode(404, "User not found.");// NotFound();
+        //    }
 
-            var resultEmailRequestHist = await _context.EmailRequestHist.FirstOrDefaultAsync(h => h.UserEmail == user.Email);
-            
-            // Kullanıcıya daha önce mail atılmamış demek.
-            if (resultEmailRequestHist == null)
-            {
-                EmailRequestHist emailrequestHist = new EmailRequestHist()
-                {
-                    RequestTime = DateTime.Now,
-                    UserEmail = user.Email,
-                };
-                _context.EmailRequestHist.Add(emailrequestHist);
-                await _context.SaveChangesAsync();
-                return Ok("Email Sent");
-            }
-            
-            if (resultEmailRequestHist.RequestTime.AddMinutes(1)< DateTime.Now)
-            {
-                resultEmailRequestHist.RequestTime = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return Ok("Email Sent");
-            }
-            else
-            {   
-                var timeDifference = DateTime.Now - resultEmailRequestHist.RequestTime;
-                return Ok((60-Convert.ToInt32(timeDifference.Seconds)).ToString() + " saniye sonra mail atılabilir");    
-            }
-            
-            return Ok("Email Sent");
-            //var user = await _context.Member.FirstOrDefaultAsync(h => h.Email == Email);
-            ////if user exist
-            //if (user == null)
-            //    return StatusCode(404, "User not found.");// NotFound();
+        //    var resultEmailRequestHist = await _context.EmailRequestHist.FirstOrDefaultAsync(h => h.UserEmail == user.Email);
 
-            
+        //    // Kullanıcıya daha önce mail atılmamış demek.
+        //    if (resultEmailRequestHist == null)
+        //    {
+        //        EmailRequestHist emailrequestHist = new EmailRequestHist()
+        //        {
+        //            RequestTime = DateTime.Now,
+        //            UserEmail = user.Email,
+        //        };
+        //        _context.EmailRequestHist.Add(emailrequestHist);
+        //        await _context.SaveChangesAsync();
 
-            //try
-            //{
-            //    var email = new MimeKit.MimeMessage();
-            //    email.From.Add(MailboxAddress.Parse("jacques98@ethereal.email"));
-            //    email.To.Add(MailboxAddress.Parse("jacques98@ethereal.email"));
-            //    email.Subject = "Test deneme birki";
-            //    email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "asffsd" };
+        //        emailService.SendEmail(emailContent);
+        //        return Ok("Email Sent");
+        //    }
 
-            //    using var smtp = new SmtpClient();
-            //    smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-            //    smtp.Authenticate("jacques98@ethereal.email", "M2ggAjXZDP1pbzme1z");
-            //    smtp.Send(email);
-            //    smtp.Disconnect(true);
-            //}
+        //    if (resultEmailRequestHist.RequestTime.AddMinutes(1) < DateTime.Now)
+        //    {
+        //        resultEmailRequestHist.RequestTime = DateTime.Now;
+        //        await _context.SaveChangesAsync();
 
-        }
+        //        emailService.SendEmail(emailContent);
+        //        return Ok("Email Sent");
+        //    }
+        //    else
+        //    {
+        //        var timeDifference = DateTime.Now - resultEmailRequestHist.RequestTime;
+        //        return Ok((60-Convert.ToInt32(timeDifference.Seconds)).ToString() + " saniye sonra mail atılabilir");
+        //    }
+
+        //    return Ok("Email Sent");
+
+        //}
 
 
 
