@@ -1,8 +1,9 @@
 ﻿using Members.Contract.Contracts;
+using Members.Contract.Data;
 using MembersService.Abstract;
 using Microsoft.AspNetCore.Mvc;
-
-
+using Microsoft.EntityFrameworkCore;
+using NETCore.MailKit.Core;
 
 namespace MembersAPI.Controllers
 {
@@ -13,13 +14,13 @@ namespace MembersAPI.Controllers
 
 
         private readonly IMemberService _memberService;
+        // private readonly IEmailService _emailService;
 
         public MemberController(IMemberService memberService)
         {
-            _memberService=memberService;
+            _memberService = memberService;
         }
-        EmailService emailService = new EmailService();
-
+        
 
         [HttpPost]
         public async Task<ActionResult> MemberAsync(AddMemberContract addMemberContract)
@@ -39,20 +40,12 @@ namespace MembersAPI.Controllers
         }
 
         //Get all users [elif]
-        //[HttpGet]
+        [HttpGet("Members")]
 
-        //public async Task<ActionResult<List<Member>>> GetUsers()
-        //{
-        //    try
-        //    {
-        //        return Ok(await _context.Member.ToListAsync());
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Ok(e);
-        //    }
-        //}
+        public async Task<ActionResult<List<Member>>> GetMembers()
+        {
+            return await _memberService.GetAllMembers();
+        }
 
         // User search by Email [elif]
         //[HttpPost("Email")]

@@ -4,6 +4,7 @@ using MembersDataAccess.Concrete;
 using MembersDataAccess.Data;
 using MembersService.Abstract;
 using MembersService.Concrete;
+using NETCore.MailKit.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +27,11 @@ builder.Services.AddTransient<IMemberRepository, MemberRepository>();
 
 #region services
 builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IEmailRequestService, EmailRequestService>();
+builder.Services.AddScoped<MembersService.Abstract.IEmailService, MembersService.Concrete.EmailService>(); 
 
-#endregion
+
+#endregion.
 
 var app = builder.Build();
 

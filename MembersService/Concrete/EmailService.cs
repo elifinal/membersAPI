@@ -1,21 +1,29 @@
-﻿using MailKit.Net.Smtp;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Members.Contract;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using MembersService.Abstract;
 
-namespace MembersAPI
+namespace MembersService.Concrete
 {
-    public class EmailService // EmailService
+    public class EmailService : IEmailService
     {
-        public void SendEmail(EmailContent emailContent)
+        public void SendEmail(EmailContract emailContract) 
         {
             PrivateSendEmail(new EmailContract
             {
-                To=emailContent.UserEmail,
-                Body=emailContent.Body,
-                Subject=emailContent.Title,
+                To=emailContract.To,
+                Body=emailContract.Body,
+                Subject=emailContract.Subject
             });
 
         }
+
 
         private void PrivateSendEmail(EmailContract emailContract)
         {
@@ -32,5 +40,6 @@ namespace MembersAPI
             smtp.Disconnect(true);
 
         }
+
     }
 }
