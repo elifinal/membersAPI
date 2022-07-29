@@ -28,14 +28,14 @@ namespace MembersService.Concrete
         private void PrivateSendEmail(EmailContract emailContract)
         {
             var email = new MimeKit.MimeMessage();
-            email.From.Add(MailboxAddress.Parse("ray56@ethereal.email"));
+            email.From.Add(MailboxAddress.Parse("torrance.jacobs@ethereal.email"));
             email.To.Add(MailboxAddress.Parse(emailContract.To));
             email.Subject = emailContract.Subject;
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = emailContract.Body };
 
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("ray56@ethereal.email", "zBkxtfY2URTFDwnpEQ");
+            smtp.Authenticate("torrance.jacobs@ethereal.email", "hz4D3teaYwN27HUYsK");
             smtp.Send(email);
             smtp.Disconnect(true);
 

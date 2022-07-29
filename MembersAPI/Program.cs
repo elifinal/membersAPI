@@ -22,6 +22,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 #region repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IMemberRepository, MemberRepository>();
+builder.Services.AddTransient<IEmailRequestRepository, EmailRequestRepository>();
 
 #endregion
 

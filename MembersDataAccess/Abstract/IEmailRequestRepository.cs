@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MembersDataAccess.Abstract
 {
-    public interface IEmailRequestRepository
+    public interface IEmailRequestRepository: IGenericRepository<EmailRequestHist>
     {
         Task<EmailRequestHist> GetMemberByEmailHistory(string email);
     }
