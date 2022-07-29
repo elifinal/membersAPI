@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Members.Contract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace MembersService.Abstract
 {
     public interface IEmailRequestService
     {
-
+        Task<EmailContract> SendMailToMember(EmailContract emailContract);
     }
 }

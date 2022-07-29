@@ -1,4 +1,5 @@
 ﻿using Members.Contract;
+using Members.Contract.Data;
 using MembersDataAccess.Abstract;
 using MembersDataAccess.Concrete;
 using MembersService.Abstract;
@@ -14,14 +15,16 @@ namespace MembersService.Concrete
     {
         private readonly IMemberRepository _memberRepository;
         private readonly IEmailRequestRepository _emailRequestRepository;
+        private readonly IEmailService _emailService;
 
-        public EmailRequestService(IMemberRepository memberRepository, IEmailRequestRepository emailRequestRepository)
+        public EmailRequestService(IMemberRepository memberRepository, IEmailRequestRepository emailRequestRepository, IEmailService emailService )
         {
             _memberRepository=memberRepository;
             _emailRequestRepository=emailRequestRepository;
+            _emailService=emailService;
         }
 
-        public async Task<EmailContract> SendMail(EmailContract emailContract)
+        public async Task<EmailContract> SendMailToMember(EmailContract emailContract)
         {
             var user = await _memberRepository.GetMemberByEmail(emailContract.To);
             //if user exist
@@ -35,42 +38,29 @@ namespace MembersService.Concrete
             // Kullanıcıya daha önce mail atılmamış demek.
             if (resultEmailRequestHist == null)
             {
-                _emailRequestRepository.
-
-                EmailRequestHist emailrequestHist = new EmailRequestHist()
+                await _emailRequestRepository.AddAsync(new EmailRequestHist
                 {
                     RequestTime = DateTime.Now,
-                    UserEmail = user.Email,
-                };
-                _context.EmailRequestHist.Add(emailrequestHist);
-                await _context.SaveChangesAsync();
-
-                emailService.SendEmail(emailContent);
-                return Ok("Email Sent");
-
-                _emailService.SendEmail(new EmailContract
-                {
-                    To=email,
-                    Subject="Test Title",
-                    Body="Test Body"
+                    UserEmail = user.Email
                 });
+                _emailService.SendEmail(emailContract);
+                return emailContract;
             }
 
             if (resultEmailRequestHist.RequestTime.AddMinutes(1) < DateTime.Now)
             {
                 resultEmailRequestHist.RequestTime = DateTime.Now;
-                await _context.SaveChangesAsync();
-
-                emailService.SendEmail(emailContent);
-                return Ok("Email Sent");
+                await _emailRequestRepository.UpdateAsync(resultEmailRequestHist);
+                _emailService.SendEmail(emailContract);
+                return emailContract;
             }
             else
             {
                 var timeDifference = DateTime.Now - resultEmailRequestHist.RequestTime;
-                return Ok((60-Convert.ToInt32(timeDifference.Seconds)).ToString() + " saniye sonra mail atılabilir");
-            }
+                var res = (60-Convert.ToInt32(timeDifference.Seconds)).ToString();
 
-            return Ok("Email Sent");
+                return emailContract;
+            }
 
         }
     }
