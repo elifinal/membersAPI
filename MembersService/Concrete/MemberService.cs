@@ -1,4 +1,5 @@
-﻿using Members.Contract.Contracts;
+﻿using Members.Contract;
+using Members.Contract.Contracts;
 using Members.Contract.Data;
 using MembersDataAccess.Abstract;
 using MembersDataAccess.Data;
@@ -9,10 +10,12 @@ namespace MembersService.Concrete
     public class MemberService : IMemberService
     {
         private readonly IMemberRepository _memberRepository;
+        private readonly IEmailService _emailService;
 
-        public MemberService(IMemberRepository memberRepository)
+        public MemberService(IMemberRepository memberRepository, IEmailService emailService)
         {
-            _memberRepository = memberRepository;
+            _memberRepository=memberRepository;
+            _emailService=emailService;
         }
 
 
@@ -29,30 +32,28 @@ namespace MembersService.Concrete
                     throw new Exception();
                 }
 
-                var mapMember = new Member
+                var member = new Member()
                 {
-                    FirsName = addMemberContract.FirsName, // sol taraf db (new member dediğimiz için add için geçerli) ---- sağ client 
-                    LastName = addMemberContract.LastName,
                     Email = addMemberContract.Email,
+                    FirsName = addMemberContract.FirsName,
+                    LastName = addMemberContract.LastName,
                     Password = addMemberContract.Password,
                     PhoneNumber = addMemberContract.PhoneNumber
+
                 };
 
-                await _memberRepository.AddAsync(mapMember);
 
 
-                //_context.Member.Add(member);                          //// burada kullanılacak şeyleri 32 den başladık kullandık
-                //await _context.SaveChangesAsync();
+                var result = await _memberRepository.AddAsync(member);
 
-                //emailService.SendEmail(new EmailContent      // email service , dbde olan tablo kadar repo olur
-                //                                                      concrete emailservice  abstract Iemailseervice -- controller de emailservice de yapılacak
-                //{
-                //    UserEmail=email,
-                //    Title="Test Title",
-                //    Body="Test Body"
-                //});
-
-                //return Ok("User Saved New User Mail Sended");
+                _emailService.SendEmail(new EmailContract
+                {
+                    To=email,
+                    Subject="Test Title",
+                    Body="Test Body"
+                });
+                
+                 // yeni kontrakt tanıml
 
             }
             catch (Exception e)
@@ -61,6 +62,12 @@ namespace MembersService.Concrete
             }
 
             return addMemberContract;
+        }
+
+        public async Task<List<Member>> GetAllMembers()
+        {
+            var data = await _memberRepository.GetAllAsync();
+            return data.ToList();
         }
     }
 }

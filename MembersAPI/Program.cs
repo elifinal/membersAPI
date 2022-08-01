@@ -4,6 +4,7 @@ using MembersDataAccess.Concrete;
 using MembersDataAccess.Data;
 using MembersService.Abstract;
 using MembersService.Concrete;
+using NETCore.MailKit.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +22,17 @@ builder.Services.AddDbContext<DataContext>(options =>
 #region repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IMemberRepository, MemberRepository>();
-// builder.Services.AddTransient<IEmailRepository, EmailRepository>();
+builder.Services.AddTransient<IEmailRequestRepository, EmailRequestRepository>();
 
 #endregion
 
 #region services
 builder.Services.AddScoped<IMemberService, MemberService>();
-//builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailRequestService, EmailRequestService>();
+builder.Services.AddScoped<MembersService.Abstract.IEmailService, MembersService.Concrete.EmailService>(); 
 
-#endregion
+
+#endregion.
 
 var app = builder.Build();
 
